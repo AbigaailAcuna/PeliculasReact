@@ -20,12 +20,15 @@ const getMovies = async () => {
                 throw new Error(`Failed to fetch details for ${pokemon.name}`);
             }
             const pokemonData = await pokemonResponse.json();
+          //  console.log(pokemonData.id);
             return {
+                id: pokemonData.id,
                 name: pokemonData.name,
                 image: pokemonData.sprites.other['official-artwork'].front_default
             };
         }));
 
+        
         return movies;
     } catch (error) {
         console.error('Error fetching movies:', error);
@@ -33,4 +36,29 @@ const getMovies = async () => {
     }
 };
 
-export { getMovies };
+const getMovie = async (movieid) => {
+    try {
+        const response = await fetch(`${URLapi}/${movieid}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log('API Response:', data); 
+
+        const movie = {
+            id : data.id,
+            name : data.name,
+            image : data.sprites.other['official-artwork'].front_default
+        };
+
+       // console.log("aaa"+ movie.id)
+        return movie;
+        //solo es uno así que no mapeamos
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+        return null;
+    }
+};
+
+
+export { getMovies, getMovie };
